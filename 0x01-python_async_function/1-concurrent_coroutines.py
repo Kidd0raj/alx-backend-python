@@ -1,38 +1,18 @@
-k 1's module.
-
-This module provides an asynchronous function wait_n,
-which executes wait_random n times and returns a sorted list of wait times.
-'''
 import asyncio
 from typing import List
-from random import random
+from 0-basic_async_syntax import wait_random
 
+async def wait_n(n: int, max_delay: int = 10) -> List[float]:
+    '''
+    Async Routine: Spawns wait_random n times with the specified max_delay.
 
-async def wait_random(max_delay: int) -> float:
-        '''
-            Asynchronous function to simulate a random delay.
+    Args:
+        n (int): Number of times to spawn wait_random.
+        max_delay (int): Maximum delay in seconds for each wait_random call (default is 10).
 
-                Args:
-                        max_delay (int): The maximum delay in seconds.
-
-                            Returns:
-                                    float: The generated random wait time.
-                                        '''
-                                            await asyncio.sleep(random() * max_delay)
-                                                return max_delay
-
-
-                                            async def wait_n(n: int, max_delay: int) -> List[float]:
-                                                    '''
-                                                        Executes wait_random n times and returns a sorted list of wait times.
-
-                                                            Args:
-                                                                    n (int): The number of times to execute wait_random.
-                                                                            max_delay (int): The maximum delay in seconds.
-
-                                                                                Returns:
-                                                                                        List[float]: A sorted list of wait times.
-                                                                                            '''
-                                                                                                wait_times = await asyncio.gather(*[wait_random(max_delay) for _ in range(n)])
-                                                                                                    return sorted(wait_times)
-
+    Returns:
+        List[float]: List of delays in ascending order.
+    '''
+    tasks = [wait_random(max_delay) for _ in range(n)]
+    delays = await asyncio.gather(*tasks)
+    return sorted(delays)

@@ -1,39 +1,23 @@
-k 2's module.
-
-This module provides a function measure_time, which computes the average runtime of wait_n.
-'''
-import asyncio
 import time
-from typing import List
+from 1-concurrent_coroutines import wait_n
 
+def measure_time(n: int, max_delay: int) -> float:
+    '''
+    Measure Time Function: Measures the total execution time for wait_n(n, max_delay).
 
-async def wait_n(n: int, max_delay: int) -> List[float]:
-        '''
-            Executes wait_random n times and returns a sorted list of wait times.
+    Args:
+        n (int): Number of times to spawn wait_random.
+        max_delay (int): Maximum delay in seconds for each wait_random call.
 
-                Args:
-                        n (int): The number of times to execute wait_random.
-                                max_delay (int): The maximum delay in seconds.
+    Returns:
+        float: Average execution time per call.
+    '''
+    start_time = time.time()
 
-                                    Returns:
-                                            List[float]: A sorted list of wait times.
-                                                '''
-                                                    wait_times = await asyncio.gather(*[wait_random(max_delay) for _ in range(n)])
-                                                        return sorted(wait_times)
+    # Using asyncio.run to run the asynchronous function within a synchronous context
+    asyncio.run(wait_n(n, max_delay))
 
+    end_time = time.time()
+    total_time = end_time - start_time
 
-                                                    def measure_time(n: int, max_delay: int) -> float:
-                                                            '''
-                                                                Computes the average runtime of wait_n.
-
-                                                                    Args:
-                                                                            n (int): The number of times to execute wait_n.
-                                                                                    max_delay (int): The maximum delay in seconds.
-
-                                                                                        Returns:
-                                                                                                float: The average runtime of wait_n.
-                                                                                                    '''
-                                                                                                        start_time = time.time()
-                                                                                                            asyncio.run(wait_n(n, max_delay))
-                                                                                                                return (time.time() - start_time) / n
-
+    return total_time / n
